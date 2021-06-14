@@ -1,0 +1,48 @@
+var tests = 0;
+var passes = 0;
+var fails = 0;
+
+assert (id, val, expect, ok) => {
+
+println("assert: id     = ", id    );
+println("assert: val    = ", val   );
+println("assert: expect = ", expect);
+println("assert: ok     = ", ok    );
+
+   tests++;
+   if (ok) {
+      if(echo) print("test {id} passed ");
+      if(echo) println("({val} <=> {expect})");
+      passes++;
+   } else {
+      fails++;
+      print("test {id} failed ");
+      println("({val} <=> {expect})");
+   }      
+}
+
+cmpv(val, expect) => {val == expect}
+cmps(val, expect) => {val eq expect}
+cmpa(val, expect) => {abs(val - expect) < 0.0000001}
+
+assertv(id, val, expect) => {assert(id, val, expect, cmpv(val, expect))}
+asserts(id, val, expect) => {assert(id, val, expect, cmps(val, expect))}
+asserta(id, val, expect) => {assert(id, val, expect, cmpa(val, expect))}
+
+
+println("------ tests ------");
+
+var x;
+var y;
+
+F2(x)=>{x*x};
+
+println("F2(8) = ", F2(8));
+
+println("F2(8) = {F2(8)}");
+
+
+var interv1 = 555;
+asserts('ID79', sprintf("qqq {interv1} qqq"        ), "qqq 555 qqq");   # interpolate int
+
+println ("joe: " , sprintf("joe"));

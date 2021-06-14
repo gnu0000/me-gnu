@@ -1,0 +1,46 @@
+#
+#z() => {
+#   var i;
+#   for (i=0; i<20; i++) {
+#      if (i % 2) next;
+#      if (i >= 15) last;
+#      print ("[",i,"]");
+#   }
+#   println();
+#   return i;
+#};
+#var x = 1;
+#println(x);
+#H1 = {x => 2};
+#
+#println("z(): ", z());
+#println(H1[x]);
+
+#var h1 = {"x" => 3};
+#var s1 = dumpref(h1);
+#
+####### ok 1 ######
+#var h1;
+#h1["x"] = 123;
+#println(h1["x"]);
+#
+####### ?? 2 ######
+#var h2 = {"x"=>456};
+#println(h2["x"]);
+#
+####### ?? 3 ######
+var h3 = {z=>789, w=>023, v=>{a=>777}};
+var p = "v";
+#println(h3[p]["a"]);
+#h3.v.a = 888;
+h3["v"]["a"] = 888;
+println(h3["v"]["a"]);
+println(h3.v.a);
+h3["v"]= 14;
+println(h3.v);
+
+
+
+var h2 = {"x"=>456};
+println(h2.x);
+

@@ -1,0 +1,11 @@
+
+println("00");
+
+println("------ tests ------");
+
+
+F(x) => {x * x};
+
+var a = F(10);
+
+println("A: ", a);

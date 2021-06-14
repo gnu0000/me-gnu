@@ -1,0 +1,22 @@
+# var t1 = 1;
+# println("print test {t1} {t2}");
+# println('print test {t1} {t2}');
+# var h1;
+# h1["bob"] = 6;
+# println("bob : " , h1["bob"])
+# println("bill: " , h1["bill"] || "")
+# var y = h1["bob"]
+# println("y: {y}");
+# var z = h1;
+# println("z: {z['bob']}")
+
+var hash1;
+
+# broken - each assignmwnt wipes hash
+hash1["fred"]  = 123;        
+hash1["bill"] = "billy";
+hash1["stan"] = 4.0176;
+
+println("hash1['fred'] = " . hash1["fred"]);
+println("hash1['bill'] = " . hash1["bill"]);
+println("hash1['stan'] = " . hash1["stan"]);

@@ -1,0 +1,18 @@
+^history
+   help
+   show
+   import
+      {exfiles}   
+   export
+      {exfiles}   
+   add
+      {exfiles}   
+   find
+      {any}
+   getref
+   setref
+      {ctxlist}
+   clear
+   minsavelen
+   maxsaves  
+   nohistmod 

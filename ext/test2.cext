@@ -1,0 +1,42 @@
+^word1
+   word01
+   word02
+   word03
+^word2
+   word04
+^word3
+^word4
+   word06
+   word02
+   word07
+      word008
+      word009
+         word0001
+         word0002
+         word0003
+         word0004
+^word5
+   word09
+^word6
+   word4
+   word009
+aword1
+aword2
+   aword21
+   aword22
+   aword23
+   aword24
+      aword241
+      aword242
+      aword243
+   aword25
+aword4
+   {optlist}
+      {optlist}
+aword5
+   aaaaa
+   bbbbb
+   {optlist}
+      cccccc
+      dddddd
+      {optlist}

@@ -1,0 +1,113 @@
+^context
+   show 
+   list 
+   listall
+   clear
+   {ctxlist}
+   help
+^help
+   welcome 
+   commands 
+   help 
+   features 
+   context 
+   keys 
+   set 
+   tset 
+   show 
+   extern 
+   history
+   clear 
+   optlist 
+   cmdline 
+^set
+   {optlist}
+   clear
+   help
+^tset   
+   {optlist}
+   clear
+   help
+^show   
+   contexts 
+   context
+      {ctxlist}
+      all
+   history
+      {ctxlist}
+      all
+   extern
+      {ctxlist}
+      all
+   tags
+      {ctxlist}
+      all
+   clip
+      {ctxlist}
+      all
+   options
+      {ctxlist}
+      all
+   toptions 
+   goptions 
+   keymacros
+   stream 
+   optlist 
+   key 
+   debug
+      {ctxlist}
+      all
+   help
+^extern 
+   show    
+   showb
+   add
+   addc
+   clear   
+   load
+      {exfiles}
+   loadc
+      {exfiles}
+   addf
+      {exfiles}
+   addfc
+      {exfiles}
+   setref
+      {ctxlist}
+   settype
+   setf
+   help
+^history
+   help
+   show
+   import
+      {exfiles}   
+   export
+      {exfiles}   
+   add
+      {exfiles}   
+   find
+      {any}
+   getref
+   setref
+      {ctxlist}
+   clear
+   minsavelen
+   maxsaves  
+   nohistmod 
+^save   
+   {exfiles}
+^load   
+   {exfiles}
+^clear  
+   context 
+   history 
+   extern 
+   tags 
+   options 
+   help
+^list
+   {exfiles}   
+^dir
+   {exfiles}   
+^exit 

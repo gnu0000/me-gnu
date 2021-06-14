@@ -1,0 +1,233 @@
+#
+# Var.pm - variables storage
+#
+# *level 0*
+#
+# VarContext()                      get current ctx name
+# VarContext(ident)                 set current ctx name
+# VarContext({},ident)              various: options: clear=>1, init=>{}, getlist=>1, push=>1, pop=>1
+# VarContext({list   =>1}       )   return array of ctx names                                       
+# VarContext({push   =>1}, ident)   push ctx name
+# VarContext({pop    =>1}       )   pop  ctx name
+# VarContext({clear  =>1}       )   delete everything from context
+# VarContext({varlist=>1}       )   return list of var names in context
+# VarContext({varmap =>1}       )   return map of var names/vals in context
+#
+#                                            
+#                                            
+#  fn       params                   return  
+# ---------------------------------------------------------------------------------
+# Var()                      #  undef                           scalar   # (_exists_ident, _delete_ident)
+# Var(ident)                 #  ident val                       scalar   # (_exists_ident, _delete_ident)
+# Var(ident=>val)            #  set var,  return val            scalar   # (_default_ident=>val, _init_ident=>val, _exists_ident=>1, _delete_ident=>1) 
+# Var(ident=>val,ident=>val) #  set vars, return array          array   
+# Var({opt},)                #  undef                           scalar   # (_exists_ident, _delete_ident)
+# Var({opt},ident)           #  ident val                       scalar   # (_exists_ident, _delete_ident)
+# Var({opt},ident=>val)      #  set var,  return val            scalar   # (_default_ident=>val, _init_ident=>val, _exists_ident=>1, _delete_ident=>1) 
+# Var({opt},ident=>val...)   #  set vars, return array          array   
+  Var({opt},ident)           #  set vars, return hash           href
+
+
+ret     => scalar | array | hash | aref | href | 
+op      => and | or | min | max | not | truth | count | 
+
+default =>1
+init    =>1
+exists  =>1
+delete  =>1
+
+scoped    =>1
+savescope =>ctx
+scopechain=>[ctx,ctx,...]
+
+call                          return
+-----------------------------------------------------------
+Var("findex"             )     55    value of the var
+Var("_exists_findex"     )     1     1 or 0 :  if exists
+Var("_delete_findex"     )     1     1 or 0 :  if deleted
+Var(findex          => 55)     55    set, return var (create if needed)
+Var(_init_findex    => 25)     55    create/set if new, return value of the var
+Var(_default_findex => 45)     55    return value of the var or 45 if no var
+Var(_exists_findex  => 99)     99    99 or 0 : if exists
+Var(_delete_findex  => 88)     88    88 or 0 : if deleted
+Var(aa=>11,bb=>22        )  (11,22)  multiples default to array return
+
+Var({ret=>"scalar"},a=>9,b=>3)   9          value of 'a', the 1st one
+Var({ret=>"array" },a=>9,b=>3)  (9,3)       
+Var({ret=>"hash"  },a=>9,b=>3)  (a=>9,b=>3) 
+Var({ret=>"aref"  },a=>9,b=>3)  [9,3]       
+Var({ret=>"href"  },a=>9,b=>3)  {a=>9,b=>3} 
+
+Var({op=>val  },a=>9,b=>0)   (9,0)    
+Var({op=>and  },a=>9,b=>0)   0
+Var({op=>or   },a=>9,b=>3)   1        
+Var({op=>min  },a=>9,b=>3)   3        
+Var({op=>max  },a=>9,b=>3)   9        
+Var({op=>truth},a=>9,b=>0)   (1,0)
+Var({op=>not  },a=>9,b=>0)   (0,1)
+Var({op=>count},a=>9,b=>3)   2
+
+Var({op=>},a=>9,b=>3)   9          value of 'a', the 1st one
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Var({}, "findex"           )
+Var({}, "_exists_findex"   )
+Var({}, "_delete_findex"   )
+Var({}, findex         =>55)
+Var({}, _init_findex   =>55)
+Var({}, _default_findex=>55)
+Var({}, _exists_findex =>55)
+Var({}, _delete_findex =>55)
+
+
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+Var({}, findex=>55)
+
+
+                                             
+# Vars      ()                               
+# Vars      (name)                           
+# Vars      (name,name,name)                 
+                                             
+                                             
+# VarGet    ()                               
+# VarSet    (name                            
+# Vars      (name                            
+                                             
+                                             
+                                             
+                                             
+#           (name                            
+#           (name                            
+#           (name                            
+# Vars      (                                
+# VarGet    (                                
+# VarSet    (                                
+# VarDefault(                                
+# VarInit   (                                
+# VarExists (                                
+# VarDelete (                                
+# VarMake   (                                
+#                                            
+                                             
+
+
+
+
+#
+#
+#
+# DelContext (context);
+# InitContext(context,ref)   (context,name=>val,name=>val,name=>val)
+#
+# Var    (context,name               )      val         [get val)
+#        (context,name=>val          )      val         [set, create if needed)
+#        (context,name=>val,..       )      (val,...)   [set, returns array)
+#        (context,_exists_name=>1    )      1|0         [existance check]
+#        (context,_delete_name=>1    )      1|0         [delete, returns 1 or 0 in scalar ctxt]
+#        (context,_default_name=>defval)    val|defval  [return val if exists, or ret defval]
+#        (context,_init_name=>initval)      val|initval [create set, return initval if new, or ret val]
+#
+#x Vars  (context)                          {}          [hashref of all ctx vars]
+#x Vars  (context,name,name...)             (val,val)   [array og get vals]
+#
+# VarGet    
+#           (context,name,name...)           (val,val...)
+# VarExists 
+#           (context,name,name...)           (1|0,1|0...)
+# VarDelete 
+#           (context,name,name...)           (1|0,1|0...)
+# VarSet    
+#           (context,name=>val,name=>val...) (val,val...)
+#           (context,{href})
+# VarDefault
+#           (context,name=>val,name=>val...) (val,val...)
+# VarInit   
+#           (context,name=>val,name=>val...) (val,val...)
+# VarMake   
+#           (context,val...)                 (name,name...)
+
+#x SaveVars(%options)         {context=>ctx,skip=>ctx}
+#x LoadVars(data,%options)    {context=>ctx,skip=>ctx
+#
+#
+#
+#--------------------------------------------------------------------------
+# *level 1*
+#
+# VarContext()                  (context)
+# xPushContext(context)  
+# xPopContext()
+#
+# GVar () (context=global)
+# CVar () (context=current)
+# TVar () (context=temp)
+#
+#

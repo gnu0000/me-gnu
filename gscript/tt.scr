@@ -1,0 +1,48 @@
+println(timer());
+println(timer(2));
+   
+var arr;
+for (i=0; i<50; i++)
+   {
+   arr[i] = i * i;
+   }
+
+for (i=0; i<50; i++)
+   {
+   var i1 = int(rand(50));
+   var i2 = int(rand(50));
+   var tmp = arr[i1];
+   arr[i1] = arr[i2];
+   arr[i2] = tmp;
+   }
+
+for (i=0; i<50; i++)
+   {
+   #print ("arr[{i}]:", arr[i], ", ");
+   }
+
+var h1;
+var h2;
+
+h1[0] = "aaa";
+h2[0] = "bbb";
+h1[1] = h2;
+
+println("nest: ", h1[1][0] );
+
+
+println(timer());
+
+
+S(x) => {x < 1 ? 1 : (x % 2 ? S(x-1)+S(x-2) : S(x-3)+S(x-4))};
+
+
+println("S() = ", S(25));
+#println("S() = ", S(5));
+println(timer(2));
+
+#var t1 = 17.5;
+#var t2 = 10;
+#var t3 = t1 % t2;
+#println("t3: ", t3);
+#println("v1: ", v1);

@@ -1,0 +1,44 @@
+
+timer(2)
+
+var ct1 = 0;
+
+println("Fn timer test: major recurse...");
+println(timer());
+S(x) => {ct1++, x < 1 ? 1 : (x % 2 ? S(x-1)+S(x-2) : S(x-3)+S(x-4))};
+S(37);
+println(timer(), " ({ct1})\n");
+
+########################################################
+
+println("Fn timer test: major loop...");
+println(timer());
+
+var ct2 = 0;
+
+T2(y) => {
+   var result=0;
+   var a = 1;
+   var b = 2;
+   var c;
+   for (var i=0; i<y; i++) {
+      result += y;
+      a = a + b;
+      b = a - 2*b + a*b;
+      c = y % 2 ? a : b;
+      ct2++;
+   }
+   result;
+};
+
+T1(x,y) => {
+   var result=0;
+   for (var i=0; i<x; i++) {
+      result = result + T2(y);
+   }
+   result;
+}
+T1(250,250);
+
+println(timer(), " ({ct2})\n");
+println("Total: " , timer(2));

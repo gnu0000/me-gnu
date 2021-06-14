@@ -1,0 +1,288 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Gnu::ArgParse - Commandline Argument Parsing Utility</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#revision_history">REVISION HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>Gnu::ArgParse - Commandline Argument Parsing Utility</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+   <span class="keyword">use</span> <span class="variable">InfoTech::Helper::ArgParse</span><span class="operator">;</span>
+</pre>
+<pre>
+   <span class="variable">ArgBuild</span><span class="operator">(</span><span class="string">"XSize= YSize= help"</span><span class="operator">);</span>
+</pre>
+<pre>
+   <span class="variable">ArgParse</span><span class="operator">(</span><span class="variable">@ARGV</span><span class="operator">)</span> <span class="keyword">or</span> <span class="keyword">die</span> <span class="variable">ArgGetError</span><span class="operator">();</span>
+</pre>
+<pre>
+   <span class="variable">Usage</span><span class="operator">()</span> <span class="keyword">if</span> <span class="variable">ArgIs</span><span class="operator">(</span><span class="string">"help"</span><span class="operator">);</span>
+</pre>
+<pre>
+   <span class="keyword">my</span> <span class="variable">$XSize</span> <span class="operator">=</span> <span class="variable">ArgGet</span><span class="operator">(</span><span class="string">"XSize"</span><span class="operator">);</span>
+   <span class="keyword">my</span> <span class="variable">$YSize</span> <span class="operator">=</span> <span class="variable">ArgGet</span><span class="operator">(</span><span class="string">"YSize"</span><span class="operator">);</span>
+</pre>
+<pre>
+   <span class="keyword">my</span> <span class="variable">$filename</span> <span class="operator">=</span> <span class="variable">ArgGet</span><span class="operator">();</span>
+</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module provides convenient access to commandline arguments.
+Swiched parameters (parameters preceeded by a slash or dash),
+Unswitched parameters, case insensitivity, minimal matching,
+multiple parameter use, and parameter values are all supported.</p>
+<dl>
+<dt><strong><a name="argbuild" class="item"><strong>ArgBuild</strong></a></strong>
+
+<dd>
+<pre>
+   <span class="variable">ArgBuild</span><span class="operator">(</span><span class="string">"*^Type= *^Width= *^Height= *^Help"</span><span class="operator">);</span>
+</pre>
+</dd>
+<dd>
+<pre>
+   ArgBuild provides the module a template of the expected parameters.
+   In the above example, the module may expect four switched parameters
+   that are all case insensitive, may be minimally matched, and all but the
+   help parameter is expected to have a value.</pre>
+</dd>
+<dd>
+<pre>
+   so, for example the parameters: /t=jpg -Width=80 /hei:40 myfile.jpg
+   would be considered valid parameters.</pre>
+</dd>
+<dd>
+<pre>
+   The function returns true unless you screwed up the template, in which
+   case you'll get a false return.</pre>
+</dd>
+<dd>
+<pre>
+   The definition of an entry in the template string is as follows:</pre>
+</dd>
+<dd>
+<pre>
+   *^PName@
+   ||  |  |
+   ||  |  | Parameter value specifier
+   ||  |  | ------------------------
+   ||  |    - (space) Parameter has no value
+   ||  |  = - Parameter has a value that is preceeded by whitespace, :, or = sign
+   ||  |  ? - Optional parameter value
+   ||  |
+   ||  Parameter name to look for
+   ||
+   |Case Insensitivity Flag, Leave out to be Case Sensitive
+   |
+   Minimal Matching Flag, leave out for exact match only</pre>
+</dd>
+<dt><strong><a name="argparse" class="item"><strong>ArgParse</strong></a></strong>
+
+<dd>
+<pre>
+   ArgParse(@ARGV)</pre>
+</dd>
+<dd>
+<pre>
+   ArgParse parses the parameters for future querying.  You may call this
+   function more than once if you have some values setup in the env (ALA PERL5OPT)
+   or a config file with some preset values in it.</pre>
+</dd>
+<dd>
+<pre>
+   I is also sometimes usefull to call this again with predefined values to use
+   as defaults.</pre>
+</dd>
+<dt><strong><a name="argaddconfig" class="item"><strong>ArgAddConfig</strong></a></strong>
+
+<dd>
+<pre>
+   ArgAddConfig(filespec)</pre>
+</dd>
+<dd>
+<pre>
+   ArgAddConfig loads parameters from a config file. If you dont pass a filename
+   the file is assumed to be the same filespec as the perl script but with a .cfg
+   file extension. The contents of the file are just like the commandline args
+   with the following extensions: lines beginning with a # char are ignored, and
+   params can be on multiple lines.</pre>
+</dd>
+<dt><strong><a name="argis" class="item"><strong>ArgIs</strong></a></strong>
+
+<dd>
+<pre>
+   ArgIs(&quot;MyParam&quot;)</pre>
+</dd>
+<dd>
+<pre>
+   This will return the number of times the /MyParam parameter was specified on
+   the commandline</pre>
+</dd>
+<dd>
+<pre>
+   ArgIs()</pre>
+</dd>
+<dd>
+<pre>
+   This will return the number unswitched parameters were specified on
+   the commandline.</pre>
+</dd>
+<dt><strong><a name="argget" class="item"><strong>ArgGet</strong></a></strong>
+
+<dd>
+<pre>
+   ArgGet(&quot;MyParam&quot;)</pre>
+</dd>
+<dd>
+<pre>
+   This will return the value associated with the first occurence of the parameter.</pre>
+</dd>
+<dd>
+<pre>
+   ArgGet(&quot;MyParam&quot;, 1)</pre>
+</dd>
+<dd>
+<pre>
+   This will return the value associated with the second occurence of the parameter.</pre>
+</dd>
+<dd>
+<pre>
+   ArgGet()</pre>
+</dd>
+<dd>
+<pre>
+   This will return the first unswitched parameter</pre>
+</dd>
+<dd>
+<pre>
+   ArgGet(undef, 2)</pre>
+</dd>
+<dd>
+<pre>
+   This will return the third unswitched parameter</pre>
+</dd>
+<dd>
+<pre>
+   ArgGet returns undef if the parameter was not specified, or if you asked for
+   an index beyond the number of times the parameter was specified.</pre>
+</dd>
+<dt><strong><a name="argsget" class="item"><strong>ArgsGet</strong></a></strong>
+
+<dd>
+<pre>
+   This is like ArgGet() but accepts an array and returns an array</pre>
+</dd>
+<dd>
+<pre>
+   ArgsGet(&quot;Param1&quot;, &quot;Param2&quot; ...)</pre>
+</dd>
+<dd>
+<pre>
+   returns an array with the value of the parameters</pre>
+</dd>
+<dt><strong><a name="arggetall" class="item"><strong>ArgGetAll</strong></a></strong>
+
+<dd>
+<pre>
+   This is like ArgGet() but returns an array of all invocations of the param</pre>
+</dd>
+<dd>
+<pre>
+   So, if the user specified args like this: foo.pl -key=Bill -key=Patty</pre>
+</dd>
+<dd>
+<pre>
+   ArgGetAll(&quot;key&quot;)</pre>
+</dd>
+<dd>
+<pre>
+   returns an array with the values Bill and Patty</pre>
+</dd>
+<dt><strong><a name="arggeterror" class="item"><strong>ArgGetError</strong></a></strong>
+
+<dd>
+<pre>
+   <span class="variable">ArgParse</span><span class="operator">(</span><span class="variable">@ARGV</span><span class="operator">)</span> <span class="keyword">or</span> <span class="keyword">die</span> <span class="variable">ArgGetError</span><span class="operator">();</span>
+</pre>
+</dd>
+<dd>
+<pre>
+   ArgBuild will return 0 if you messed up the template.
+   ArgParse will return 0 if the user messed up the parameters.
+   In either case, you can call ArgGetError() to get a description</pre>
+</dd>
+<dd>
+<pre>
+   Example:</pre>
+</dd>
+<dd>
+<pre>
+   <span class="variable">ArgBuild</span><span class="operator">(</span><span class="string">"*^Fritos *^Frodo"</span><span class="operator">)</span>
+   <span class="variable">ArgParse</span><span class="operator">(</span><span class="string">"/fr"</span><span class="operator">)</span> <span class="keyword">or</span> <span class="keyword">die</span> <span class="variable">ArgGetError</span><span class="operator">();</span>
+</pre>
+</dd>
+<dd>
+<pre>
+   produces:
+     Ambiguous parameter '/fr'</pre>
+</dd>
+<dt><strong><a name="argdump" class="item"><strong>ArgDump</strong></a></strong>
+
+<dd>
+<pre>
+   ArgDump()</pre>
+</dd>
+<dd>
+<pre>
+   This is a debugging helper fn that will printout details of the
+   stored template and any parsed parameters.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="revision_history">REVISION HISTORY</a></h1>
+<dl>
+<dt><strong><a name="version_0_20" class="item">Version 0.20</a></strong>
+
+<dd>
+<p>But based on my C version which is from 1993!</p>
+</dd>
+</li>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2013 by Craig Fitzgerald</p>
+
+</body>
+
+</html>

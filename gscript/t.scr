@@ -1,0 +1,55 @@
+hash1["fred"]  = 123;        
+hash1["bill"] = "billy";
+hash1["stan"] = 4.0176;
+
+println("hash1['fred'] = " . hash1["fred"]);
+println("hash1['bill'] = " . hash1["bill"]);
+println("hash1['stan'] = " . hash1["stan"]);
+
+println("count(hash1) = " . count(hash1));
+var name = "billy-bob";
+println("len = " . length(name));
+
+var ct = count(hash1);
+var keys = keys(hash1);
+
+for (i=0; i<ct; i++)
+   {
+   var key = keys[i];
+   var val = hash1[key];
+
+   println("hashentry: {key} => {val}");
+   }
+
+for (i=0; i<count(hash1); i++)
+   val = hash1[key = keys[i]], println("hashentry: {key} => {val}");
+   
+var arr;
+for (i=0; i<50; i++)
+   {
+   arr[i] = i * i;
+   }
+
+for (i=0; i<50; i++)
+   {
+   var i1 = int(rand(50));
+   var i2 = int(rand(50));
+   var tmp = arr[i1];
+   arr[i1] = arr[i2];
+   arr[i2] = tmp;
+   }
+
+for (i=0; i<50; i++)
+   {
+   println ("arr[{i}]: ", arr[i]);
+   }
+
+
+var h1;
+var h2;
+
+h1[0] = "aaa";
+h2[0] = "bbb";
+h1[1] = h2;
+
+println("nest: ", h1[1][0] );

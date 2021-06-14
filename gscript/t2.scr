@@ -1,0 +1,11 @@
+h1[0] = "aaa";
+h2[0] = "bbb";
+h1[1] = h2;
+println("nest: ", h1[1][0] );
+println("nest: ", (h1[1])[0] );
+
+h3["a"] = "aaaaa";
+h4["a"] = "bbbbb";
+h3["b"] = h4;
+println("nest: ", h3["b"]["a"] );
+println("nest: ", (h3["b"])["a"] );

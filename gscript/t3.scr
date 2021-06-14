@@ -1,0 +1,12 @@
+var a = 1;     # testing  
+var b = 2;
+var c = 3;
+var d = 4;
+b = b + 50*a;  # testing
+c = c + 50*a;
+d = d + 50*a;
+println("a: {a}");
+println("b: {b}");
+println("c: {c}");
+println("d: {d}");
+

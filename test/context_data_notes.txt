@@ -1,0 +1,671 @@
+
+{word=>context, next=>[show, list, clear, fn:ctxlist]}
+{word=>help   , next=>[welcome,commands,help,features,context,keys,set,tset,show,extern,clear,optlist,cmdline]
+{word=>set    , next=>[clear]]
+{word=>tset   , next=>[clear]]
+{word=>show   , next=>[contexts ,context,history,extern,tags,clip,options,toptions ,goptions ,keymacros,stream ,optlist ,key ,debug]]
+{word=>extern , next=>[show,add,clear,load]
+{word=>save   ,
+{word=>load   ,
+{word=>clear  , [context,history,extern,tags,options]]
+{word=>exit]  ,
+
+
+
+
+
+
+context
+   show 
+   list 
+   clear
+help
+   welcome 
+   commands 
+   help 
+   features 
+   context 
+   keys 
+   set 
+   tset 
+   show 
+   extern 
+   clear 
+   optlist 
+   cmdline 
+set
+   clear
+tset   
+   clear
+show   
+   contexts 
+   context
+   history
+   extern
+   tags
+   clip
+   options
+   toptions 
+   goptions 
+   keymacros
+   stream 
+   optlist 
+   key 
+   debug
+extern 
+   show    
+   add str 
+   clear   
+   load file
+save   
+load   
+clear  
+   context 
+   history 
+   extern 
+   tags 
+   options 
+exit 
+
+
+
+
+
+
+
+=================================================
+
+word1
+   word01
+   word02
+   word03
+word2
+   word04
+word3
+word4
+   word06
+   word02
+   word07
+      word008
+      word009
+      *fncall*
+word5
+   word09
+   *fncall*
+^
+   word81
+      word081
+      word082
+      word5
+
+------------------------------
+
+[word1, 
+   [word01,
+    word02,
+    word03]
+],
+
+[word2,
+   [word04]
+],
+
+[word3],
+
+[word4,
+   [word06,
+    word02,
+    word07,
+      [word008,
+       word009,
+      *fncall*]
+   ],
+],
+[word5,
+   [word09,
+   *fncall*
+   ]
+],
+[*,
+   [word6,
+      [word08,
+       word09,
+         [word010,
+          word011
+         ]
+      ]
+   ],
+   [word7],
+   [word8],
+]
+
+------------------------------
+
+word1 wor_
+   ^->word1->wor*
+   *->word1->wor*
+   *->wor*
+
+word4 word07 wor_
+   word4->word07->wor_
+   *->word4->word07->wor_
+   *->word07->wor_
+   *->wor_
+
+word5 zz_
+   word5->zz*
+   *->word5->zz*
+   *->zz*
+
+word1 word02 word3 wor_
+   word1->word02->word3->wor_
+   *->word1->word02->word3->wor_
+   *->word02->word3->wor_
+   *->word3->wor_
+   *->wor_
+
+------------------------------
+
+
+
+["context", 
+   ["show", "list", "clear", \&ctxlist]
+],
+
+["help", 
+   [welcome,commands,help,features,context,keys,set,tset,show,extern,clear,optlist,cmdline]
+],
+["set"    , 
+   ["clear",\&optlist
+   ]
+],
+
+["tset"   , 
+   ["clear", \&optlist]
+],
+
+["show", 
+   ["contexts",
+    ["context", \&ctxlist],
+    "history", \&ctxlist],
+    "extern ", \&ctxlist],
+    "tags   ", \&ctxlist],
+    "clip   ", \&ctxlist],
+    "options", \&ctxlist],
+    "toptions"
+    "goptions"
+    "keymacros"
+    "stream"
+    "optlist"
+    "key"
+    "debug]]
+
+
+
+
+
+
+
+
+],
+["extern" , 
+   [show,add,clear,load]
+["save"   ,
+["load"   ,
+["clear"  , [context,history,extern,tags,options]]
+["exit"]  ,
+
+
+
+
+
+
+
+aa
+bb
+  b1
+  b2
+cc
+dd
+
+
+------------------------------------------------------------------------
+list of items. item is either:
+
+itemlist:  [item, item, ...]
+item:      string | [string, itemlist] 
+
+    ------------------------------
+    ["aa",
+     ["bb", 
+      ["b1",
+       "b2"
+      ]
+     ],
+     "cc",
+     "dd"
+    ]
+    ------------------------------
+    [ "aa",
+      ["bb", ["b1","b2"]],
+      "cc",
+      "dd"
+    ]
+------------------------------------------------------------------------
+
+list of items and children (implicit by order
+    ------------------------------
+    [
+      "aa",
+      "bb", 
+      ["b1","b2"],
+      "cc",
+      "dd",
+    ]
+    ------------------------------
+
+
+aa
+bb
+  b1
+    b11
+    b12
+  b2
+cc
+dd
+
+
+
+    [
+      "aa",
+      "bb", 
+      ["b1", ["b11", "b12"], "b2"],
+      "cc",
+      "dd",
+    ]
+
+    [
+      "aa",
+      ["bb", [["b1",["b11", "b12"]], "b2"]
+      "cc",
+      "dd",
+    ]
+
+list of items. 
+   item:
+      arrayref [$]
+      arrayref [$item, childarrayref]
+   hashref
+   fnref
+
+
+   [
+   {str=>"aa"},
+   {str=>"bb",
+    nxt=>[{str=>"b1",
+           nxt=>[{str=>"b11"}, {str=>"b12"}]},
+          {str=>"a2"}]
+   },
+   {str=>"ss"},
+   {str=>"dd"},
+   ]
+
+aa
+bb
+.b1
+..b11
+..b12
+.b2
+cc
+dd
+
+
+aa
+bb
+>b1
+>>b11
+>>b12
+>b2
+cc
+dd
+
+
+0 aa
+0 bb
+1 b1
+2 b11
+2 b12
+1 b2
+0 cc
+0 dd
+
+
+
+
+
+======================================
+
+context
+   show 
+   list 
+   listall
+   clear
+   *ctxlist*
+   help
+help
+   welcome 
+   commands 
+   help 
+   features 
+   context 
+   keys 
+   set 
+   tset 
+   show 
+   extern 
+   clear 
+   optlist 
+   cmdline 
+set
+   *optlist*
+   clear
+   help
+tset   
+   *optlist*
+   clear
+   help
+show   
+   contexts 
+   context
+      *ctxlist*
+      all
+   history
+      *ctxlist*
+      all
+   extern
+      *ctxlist*
+      all
+   tags
+      *ctxlist*
+      all
+   clip
+      *ctxlist*
+      all
+   options
+      *ctxlist*
+      all
+   toptions 
+   goptions 
+   keymacros
+   stream 
+   optlist 
+   key 
+   debug
+      *ctxlist*
+      all
+   help
+extern 
+   show    
+   add
+   clear   
+   load
+      *exfiles*
+   help
+save   
+   defult.save
+   *exfiles*
+load   
+   defult.save
+   *exfiles*
+clear  
+   context 
+   history 
+   extern 
+   tags 
+   options 
+   help
+exit 
+
+--------------------------------------------------------
+
+
+
+^context
+...show 
+...list 
+...listall
+...clear
+...{ctxlist}
+...help
+^help
+...welcome 
+...commands 
+...help 
+...features 
+...context 
+...keys 
+...set 
+...tset 
+...show 
+...extern 
+...clear 
+...optlist 
+...cmdline 
+^set
+...{optlist}
+...clear
+...help
+^tset   
+...{optlist}
+...clear
+...help
+^show   
+...contexts 
+...context
+......{ctxlist}
+......all
+...history
+......{ctxlist}
+......all
+...extern
+......{ctxlist}
+......all
+...tags
+......{ctxlist}
+......all
+...clip
+......{ctxlist}
+......all
+...options
+......{ctxlist}
+......all
+...toptions 
+...goptions 
+...keymacros
+...stream 
+...optlist 
+...key 
+...debug
+......{ctxlist}
+......all
+...help
+^extern 
+...show    
+...add
+...clear   
+...load
+......{exfiles}
+...help
+^save   
+...defult.save
+...{exfiles}
+^load   
+...defult.save
+...{exfiles}
+^clear  
+...context 
+...history 
+...extern 
+...tags 
+...options 
+...help
+^exit 
+^word1
+...word01
+...word02
+...word03
+^word2
+...word04
+^word3
+^word4
+...word06
+...word02
+...word07
+......word008
+......word009
+.........word0001
+.........word0002
+.........word0003
+.........word0004
+^word5
+...word09
+^word6
+...word4
+...word009
+aword1
+aword2
+...aword21
+...aword22
+...aword23
+...aword24
+......aword241
+......aword242
+......aword243
+...aword25
+aword4
+aword5
+negate
+...once
+...twice
+...thrice
+fee
+fi
+fo
+...an englishman
+fum
+[fini]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+^word2
+...word04
+^word3
+^word4
+...word06
+...word02
+...word07
+......word008
+......word009
+.........word0001
+.........word0002
+.........word0003
+.........word0004
+^word5
+...word09
+^word6
+...word4
+...word009
+aword1
+
+
+
+^word2
+   word04
+^word3
+^word4
+...word06
+...word02
+...word07
+......word008
+......word009
+.........word0001
+.........word0002
+.........word0003
+.........word0004
+^word5
+...word09
+^word6
+...word4
+...word009
+aword1
+
+
+word4-word07-word009
+foo-word4-word07-word009
+word2
+word2-word04
+foo-word2-word04
+
+extern
+  a1
+   - b2
+   - c2
+   - d2
+   - - e3
+   - - f3
+   - - g3
+   - - - h4
+   - - - i4
+   - - j3
+   - - k3
+  l1
+   - m2
+  d2
+   - g3
+   - - p4
+   - - q4
+   - r1
+   - - q5
+
+ chain                    srch     path
+--------------------------------------------------
+|()              | ([head])
+|(a1)            | ([head],[a1])
+|(zz)            | ([head])
+|(zz, a1)        | ([head],[a1])
+|(zz, a1)        | ([head])
+|(a1, zz)        | ([head])
+|()              | ([head])
+|(a1, d2, g3)    | ([head],[a1],[d2],[g3])
+|(xx, a1, d2, g3)| ([head],[a1],[d2],[g3]) 
+|                | ([head],[d2],[g3])      (if ^a1)
+|(zz, d2, g3)    | ([head],[d2],[g3])
+|(a1, d2, xx)    | ([head])
+
+|(a1, d2    )    | ([head],[a1],[d2])
+|(a1, d2, r1)    | ([head],[d2],[r1])
+
+
+ 

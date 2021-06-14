@@ -1,0 +1,78 @@
+
+timer(2)
+
+#
+#
+#
+println("Fn timer test: simple loop...");
+println(timer());
+var loopsize = 100000;
+var count0 = 0;
+for (var i=0; i<loopsize; i++) {
+   count0 = count0 + i;
+}
+println(timer(), " ({count0})\n");
+ 
+
+#
+#
+#
+println("Fn timer test: interpolate loop...");
+println(timer());
+var loopsize2 = 100000;
+var str = "";
+for (var i=0; i<loopsize2; i++) {
+   str = "this: {i} ::: {loopsize2}";
+}
+println(timer(), "\n");
+
+
+#
+#
+#
+var count1 = 0;
+println("Fn timer test: major recurse...");
+println(timer());
+S(x) => {count1++, x < 1 ? 1 : (x % 2 ? S(x-1)+S(x-2) : S(x-3)+S(x-4))};
+S(35);
+println(timer(), " ({count1})\n");
+
+
+#
+#
+#
+println("Fn timer test: call loop...");
+println(timer());
+
+var count2 = 0;
+
+T2(y) => {
+   var result=0;
+   var a = 1;
+   var b = 2;
+   var c;
+   for (var i=0; i<y; i++) {
+      result += y;
+      a = a + b;
+      b = a - 2*b + a*b;
+      c = y % 2 ? a : b;
+      count2++;
+   }
+   result;
+};
+
+T1(x,y) => {
+   var result=0;
+   for (var i=0; i<x; i++) {
+      result = result + T2(y);
+   }
+   result;
+}
+T1(200,200);
+
+println(timer(), " ({count2})\n");
+
+
+
+
+println("Total: " , timer(2));

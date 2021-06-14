@@ -1,0 +1,6 @@
+
+var a = sprintf("joe");
+println (a);
+
+var b = sprintf("%s = %d", "hack", 44);
+println (b);
