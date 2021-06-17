@@ -4,3 +4,4 @@ dist/
 bkup/
 *.bak
 *.zip
+*.dont

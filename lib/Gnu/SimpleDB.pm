@@ -58,7 +58,7 @@ sub ConnectMSSQL
       }
    print "Connection to server:$server, database:$database\n";
    #my $DSN = "driver={SQL Server};Server=$server;database=$database;TrustedConnection=Yes";
-   my $DSN = "driver={SQL Server};Server=$server;UID=ieuser;PWD=letmein;database=$database;TrustedConnection=Yes";
+   my $DSN = "driver={SQL Server};Server=$server;UID=ieuser;PWD=XXXXXXX;database=$database;TrustedConnection=Yes";
    my $dbh = DBI->connect("dbi:ODBC:$DSN") or die "Connect to database failed.";
 
    return $dbh;
