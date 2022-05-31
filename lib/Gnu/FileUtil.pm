@@ -124,7 +124,6 @@ sub RemoveScore
    $file->{score} = "" unless $file->{options}->{keep_score};
    }
 
-
 sub RemoveDot
    {
    my ($file) = @_;
@@ -160,25 +159,6 @@ sub SpecialAnd
       }
    }
 
-sub CvtChars       
-   {
-   my ($file) = @_;
-
-   $file->{newname} =~ s/-/_/g    unless $file->{options}->{keep_dashes};
-   $file->{newname} =~ s/\s/_/g;  
-#  $file->{newname} =~ s/\'//g;   
-   $file->{newname} =~ s/%/_/g;  
-   $file->{newname} =~ s/\[/(/g;  
-   $file->{newname} =~ s/\]/)/g;  
-   $file->{newname} =~ s/&/and/g;
-   $file->{newname} =~ s/#/_/g;
-   $file->{newname} =~ s/,/_/g;  
-   $file->{newname} =~ s/\+/_/g;  
-   $file->{newname} =~ s/\@/_/g;  
-   $file->{newname} =~ s/\!/_/g;  
-   $file->{newname} =~ s/\~/_/g;  
-   }
-
 
 sub CollapseScores
    {
@@ -194,7 +174,26 @@ sub AddScore
 
    $file->{newname} = $file->{score} . $file->{newname};
    }
-   
+
+
+sub CvtChars       
+   {
+   my ($file) = @_;
+
+   $file->{newname} =~ s/-/_/g    unless $file->{options}->{keep_dashes};
+   $file->{newname} =~ s/\s/_/g;  
+   $file->{newname} =~ s/%/_/g;  
+   $file->{newname} =~ s/\[/(/g;  
+   $file->{newname} =~ s/\]/)/g;  
+   $file->{newname} =~ s/&/and/g;
+   $file->{newname} =~ s/#/_/g;
+   $file->{newname} =~ s/,/_/g;  
+   $file->{newname} =~ s/\+/_/g;  
+   $file->{newname} =~ s/\@/_/g;  
+   $file->{newname} =~ s/\!/_/g;  
+   $file->{newname} =~ s/\~/_/g;  
+   $file->{newname} =~ s/\'//g    unless $file->{options}->{keep_quotes};
+   }
 
 1; # two
   

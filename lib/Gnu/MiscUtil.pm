@@ -31,7 +31,7 @@ sub InRange
    }
 
 
-sub SizeString
+sub SizeString0
    {
    my ($size) = @_;
 
@@ -41,6 +41,24 @@ sub SizeString
    ($char = "g", $size /= 1024) if $size > 1024;
 
    return sprintf("%04d%s", $size, $char);
+   }
+
+
+sub SizeString
+   {
+   my ($size, $short) = @_;
+
+   $short ||= 0;
+   my $scale = "B";
+
+   ($scale = "KB", $size /= 1024) if $size >= 1024;
+   ($scale = "MB", $size /= 1024) if $size >= 1024;
+   ($scale = "GB", $size /= 1024) if $size >= 1024;
+   ($scale = "TB", $size /= 1024) if $size >= 1024;
+
+   return sprintf("%04d%s", $size, lc $scale) if $short;
+   return sprintf("%04d B", $size) if $scale eq "B";
+   return sprintf("%07.2f %s", $size, $scale);
    }
 
 

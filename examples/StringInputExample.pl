@@ -2,7 +2,7 @@
 #
 # Craig Fitzgerald 01/2014
 
-use lib "lib";
+#use lib "lib";
 use warnings;
 use strict;
 use feature 'state';

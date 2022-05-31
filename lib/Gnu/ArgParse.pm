@@ -371,7 +371,7 @@ sub ArgGetAll
    {
    my ($name) = @_;
 
-   return map {ArgGet($name, $_)} (0..ArgIs($name));
+   return map {ArgGet($name, $_)} (0..ArgIs($name)-1);
    }
 
 sub ArgSwitch
