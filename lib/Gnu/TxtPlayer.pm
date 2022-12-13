@@ -1,12 +1,12 @@
-# SMPlayer.pm - 
+# TxtPlayer.pm - 
 #  C Fitzgerald 8/x/2013
 #
 # Synopsis:
 # 
-# this module is a work in progress...
+# adapter compatible with SMPlayer
 # 
 
-package Gnu::SMPlayer;
+package Gnu::TxtPlayer;
 
 use warnings;
 use strict;
@@ -20,19 +20,6 @@ use Time::HiRes;
 require Exporter;
 
 our @ISA = qw(Exporter);
-
-#oldnames
-#   InitPlayer
-#   Play
-#   Queue
-#   StopPlayer
-#   ClosePlayer
-#   IsPlayerAction
-#   PlayerAction
-#   DoToggleFullscreen
-#   PlayerActions
-#   SendCommandToPlayer
-#   SendKeyToPlayer
 
 our @EXPORT = qw(PlayerInit
                  PlayerPlay
@@ -54,45 +41,22 @@ our $VERSION   = 0.10;
 my $DEFAULT_PLAYER_ACTIONS = 
    {
     "play"       =>{action=>"play"           },
-    "p"          =>{action=>"pause"          },
-    "s"          =>{action=>"stop", delay=>1 },
     "close"      =>{action=>"close"          },
     "quit"       =>{action=>"quit"           },
-    "hide"       =>{action=>"restore/hide"   },
-    "screen_0"   =>{action=>"screen_0"       },
-    "screen_1"   =>{action=>"screen_1"       },
-    "screen_2"   =>{action=>"screen_2"       },
-    "screenshot" =>{action=>"screenshot"     },
-    "filename"   =>{action=>"show_filename"  },
-#   "n"          =>{action=>"play_next"      },
-#   "p"          =>{action=>"play_prev"      },
     "37sc"       =>{action=>"{LEFT}"         },
     "40sc"       =>{action=>"{DOWN}"         },
     "40Sc"       =>{action=>"rewind3"        },
     "39sc"       =>{action=>"{RIGHT}"        },
-#   "39sc"       =>{action=>"forward1"       },
     "38sc"       =>{action=>"{UP}"           },
     "38Sc"       =>{action=>"forward3"       },
-    "{"          =>{action=>"halve_speed"    },
-    "}"          =>{action=>"double_speed"   },
-    "["          =>{action=>"dec_speed"      },
-    "]"          =>{action=>"inc_speed"      },
-    "jump_to"    =>{action=>"jump_to"        },
-    "9"          =>{action=>"decrease_volume"},
-    "0"          =>{action=>"increase_volume"},
-    "h"          =>{action=>"sharpen"        },
-#   "b"          =>{action=>"blur"           },
     };
 
 
 #todo:.....
-my $PLAYER_SPEC  = 'c:\Program Files\SMPlayer\smplayer.exe';
-#my $PLAYER_SPEC  = 'c:\Program Files (x86)\SMPlayer\smplayer.exe';
-my $PLAYER_TITLE = 'SMPlayer';
-my $APP_TITLE    = 'thisapp';
+my $PLAYER_SPEC  = "C:\\util\\tcmd\\tcmd.exe";     #  /C /N /NT view
+my $PLAYER_TITLE = 'tcmd';
+my $APP_TITLE    = 'view';
 my $DEBUG        = 1;
-
-
 
 #
 ###############################################################################
@@ -141,7 +105,6 @@ sub PlayerSendCommand
    print "dont see player.\n" unless $ok || $quiet;
    return unless $ok;
 
-#  PlayerExec(" -send-action '$cmd'", 0); # , Context("keep_focus"));
    PlayerExec(" -send-action $cmd", 0); # , Context("keep_focus"));
    MySleep($delay) if $delay;
    }
@@ -153,7 +116,7 @@ sub PlayerSendKey
 
    $count ||= 1;
    $delay ||= 0;
-   my ($handle) = FindWindowLike(undef, "SMPlayer");
+   my ($handle) = FindWindowLike(undef, "TxtPlayer");
    return if !$handle;
 
    print "DEBUG: sending keys [$keystr]\n" if Context("debug");
@@ -201,25 +164,10 @@ sub PlayerExec
 
    return if Context("noaction");
 
-   MyExec($PLAYER_SPEC, "smplayer", $cmdline_options);
+   MyExec($PLAYER_SPEC, $PLAYER_TITLE, $cmdline_options);
 
    ActivateMe() if $keep_focus;
    }
-
-
-#todo:  use Win32::Process;
-#
-#sub MyExec
-#   {
-#   my ($cmdline) = @_;
-#
-#   return "Player module not initialized!\n" unless Context("init");
-#
-#   my $cmd = $SHELL_CMD . $cmdline . " > nul";
-#
-#   print "$cmd\n" if Context("debug");
-#   system($cmd);
-#   }   
 
 
 sub MyExec
@@ -227,11 +175,13 @@ sub MyExec
    my ($spec, $appname, $paramlist) = @_;
 
    return "Player module not initialized!\n" unless Context("init");
-   print "DEBUG: $spec $appname $paramlist\n" if Context("debug");
 
    my $ProcessObj = " " x 10240;
-   Win32::Process::Create($ProcessObj, $spec, "$appname $paramlist",
-                          0, NORMAL_PRIORITY_CLASS, ".") 
+   my $parm = "$appname /C /N /NT view $paramlist";
+
+   print "DEBUG: [$spec] [$parm]\n" if Context("debug");
+
+   Win32::Process::Create($ProcessObj, $spec, $parm, 0, NORMAL_PRIORITY_CLASS, ".")
       || die MyExecErr();
    }   
 
@@ -277,7 +227,7 @@ sub MySleep
 
 sub PlayerIsRunning
    {
-   my @handles = FindWindowLike(undef, "SMPlayer");
+   my @handles = FindWindowLike(undef, "TxtPlayer");
    return scalar(@handles) ? 1 : 0;
    }
 
@@ -329,7 +279,6 @@ sub _initopt
 
    return Context("$name", exists $options->{$name} ? $options->{$name} : $default);
    }
-
 
 
 1; # two

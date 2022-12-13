@@ -68,7 +68,7 @@ sub GetParams {
 sub ReturnText {
    my ($content) = @_;
 
-   return "Content-type: text/plain\n\n" . $content . "\n";
+   print "Content-type: text/plain\n\n" . $content . "\n";
 }
 
 

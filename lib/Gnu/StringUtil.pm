@@ -89,11 +89,12 @@ sub TrimList
 
 sub LineString
    {
-   my ($message) = @_;
+   my ($message, $len) = @_;
 
+   $len ||= 78;
    my $line  = "-" x 10;
    $line .= " $message " if $message;
-   $line .= "-" x (78 - length($line));
+   $line .= "-" x ($len - length($line));
    $line .= "\n";
 
    return $line;
@@ -112,7 +113,6 @@ sub LineString2
    }
 
 
-
 sub ChopCR
    {
    my ($string) = @_;
@@ -120,6 +120,7 @@ sub ChopCR
    $string =~ s/[\r\n]+$//;
    return $string;
    }
+
 
 sub CleanInputLine
    {

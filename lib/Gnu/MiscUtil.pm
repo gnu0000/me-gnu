@@ -49,7 +49,7 @@ sub SizeString
    my ($size, $short) = @_;
 
    $short ||= 0;
-   my $scale = "B";
+   my $scale = "B ";
 
    ($scale = "KB", $size /= 1024) if $size >= 1024;
    ($scale = "MB", $size /= 1024) if $size >= 1024;

@@ -13,7 +13,7 @@ use List::Util qw(max min);
 our @ISA         = qw(Exporter);
 our $VERSION     = 0.10;
 our @EXPORT      = qw();
-our @EXPORT_OK   = qw(OneOf OneOfStr SplitList NColumns Tuples ABList AnyHasVal);
+our @EXPORT_OK   = qw(OneOf OneOfStr SplitList SplitList2 NColumns Tuples ABList AnyHasVal);
 our %EXPORT_TAGS = (ALL=>[@EXPORT_OK]);
 
 # externals
@@ -64,6 +64,28 @@ sub SplitList
    return ([@{$list}[0..$pos-1]],[@{$list}[$pos..$count-1]]);
    }
 
+sub SplitList2
+   {
+   my ($list, $cols) = @_;
+
+   my $count = scalar @{$list};
+   return ($list) unless $count >= $cols;
+
+   my $start = 0;
+   my @split = ();
+
+   foreach my $col (1..$cols)
+      {
+      my $end = min($count - 1, $start + int(($count-1) / $cols + 0.01));
+
+      push(@split, [@{$list}[$start..$end]]);
+
+      $start = $end + 1;
+      last if $start >= $count;
+      }
+   return @split;
+   }
+
 
 sub NColumns
    {
@@ -79,7 +101,7 @@ sub NColumns
    foreach my $ridx (0..$maxrows-1)
       {
       my @parts = map{$ridx < $nrows->[$_] ? $cols->[$_]->[$ridx] : ""} (0..$ncols-1);
-      @parts    = map{sprintf ("%*s", $widths->[$_], $parts[$_])}  (0..$ncols-1);
+      @parts    = map{sprintf ("%*s", $widths->[$_], $parts[$_] || "")}  (0..$ncols-1);
       $text    .= join($delim, @parts) . "\n";
       }
    return $text;
