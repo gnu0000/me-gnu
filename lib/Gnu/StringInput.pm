@@ -72,22 +72,28 @@
 #     SIGetHistorySize .... 
 #     SIMacros ............ 
 #     SIGetMacro .......... 
-#     SIGetSpecificMacro .. 
 #     SIMacroKeyName ......
 #
 # this module is tightly bound to Gnu::KeyInput
 #
-# todo: cext {/match/}
-#                   
-#    - walk nodes as we are building the word chain 
+# todo: 
+#   Document the full api, provide examples including macros and hooks
+# 
+#   Simplify SIExternals. We should not need the type:
+#    - remove adata type, roll into cdata
+#    - remove fdata type, roll into a true callback for cdata
+# 
+#    - cext {/match/}
+#    - walk nodes as we are building the word chain (done?)
 #       - this allows different parsing regexes for different nodes
 #       - this allows associating the chain entry with a node which can allow lots of stuff
-#
 #    - true callbacks in extern data
 #    - {/match/} in extern data
 #
-#    - remove adata, roll into cdata
-#    - remove fdata, roll into a true callback for cdata
+#  Expand hook functionality beyond the existing external data handling
+#  Cleanup API. We need a clean lower level api for the hooks, and macros to use
+#
+#  Code cleanup all over, particularly External.pm
 #
 package Gnu::StringInput;
 
@@ -161,7 +167,6 @@ require Gnu::StringInput::History;
 require Gnu::StringInput::External;
 require Gnu::StringInput::Clipboard;
 require Gnu::StringInput::Alias;
-
 
 
 # default global key mappings
@@ -295,7 +300,15 @@ sub SIGetString
    SIContext({pop=>1});
    return $str;
    }
-   
+
+#
+# don't use
+# this is bugged if there is no previous value  
+#   
+#sub SIGetLastVal
+#   {
+#   return ResolveVar("_last_str");
+#   }
    
 sub IgnoreChar
    {

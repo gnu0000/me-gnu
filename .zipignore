@@ -1,0 +1,5 @@
+\*.zip
+\*.err
+\*.bkup
+*bkup/\*
+*.vscode/\*

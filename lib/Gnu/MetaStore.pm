@@ -369,6 +369,7 @@ sub Encrypt
    my $password = Context("password");
    return $data unless $password;
    $data = Compress::Zlib::memGzip($data);
+
    return RC4($name . $password, $data);
    }
 

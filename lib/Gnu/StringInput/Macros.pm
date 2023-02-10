@@ -16,8 +16,13 @@ use feature 'state';
 #  Ma_EnableMacro     enable/disable             
 #  Ma_FindMacro       find macro
 #
+#  SIMacros
+#  SIGetMacro
+#  SIEnableMacro
 #  SISetMacro
 #  SIClearMacros
+#  SIMacroKeyName
+#  SITagList
 #########################################################################
 
 
@@ -52,6 +57,14 @@ sub Ma_Macros
    return $macros;
    }
 
+
+sub SIMacros
+   {
+   my (%opt) = @_;
+   
+   return $opt{global} ? Ma_GlobalMacros() : Ma_Macros();
+   }
+
    
 # gets a specific macro in current or global context
 #   
@@ -68,6 +81,15 @@ sub Ma_GetMacro
    my $macros = $opt{global} ? Ma_GlobalMacros() : Ma_Macros();
    return $macros->{$code};
    }
+
+
+sub SIGetMacro   
+   {
+   my (%params) = @_;
+   
+   my $macro = Ma_PrepareMacro(%params);
+   return Ma_GetMacro($macro->{code}, %params);
+   }
    
    
 # sets a specific macro in current or global context
@@ -80,29 +102,34 @@ sub Ma_GetMacro
 #  opt
 #     global=>1
 #     delete=>1
+#     enable=>1 disable=>1
 #   
-sub Ma_SetMacro   
+sub Ma_SetMacro
    {
    my ($code, $macro, %opt) = @_;
    
    my $macros = $opt{global} ? Ma_GlobalMacros() : Ma_Macros();
    return delete $macros->{$code} if $opt{delete};
+   return $macros->{$code}->{disabled} = $opt{disable} if exists $opt{disable};
+   return $macros->{$code}->{disabled} = !$opt{enable} if exists $opt{enable};
    return $macros->{$code} = $macro;
    }
    
 #
 #   
-sub SISetMacro   
+sub SISetMacro
    {
    my (%params) = @_;
    
    my $macro = Ma_PrepareMacro(%params);
    my $code  = $macro->{code};
    
-   return Ma_SetMacro($code, $macro);
+   return Ma_SetMacro($code, $macro, %params);
    }
    
    
+#  This is deprecated. use  Ma_SetMacro or SISetMacro directly with enable=>boolean opt
+#   
 #  enable/disable a macro 
 #  Ma_EnableMacro("107Sc", 0           )
 #  Ma_EnableMacro("107Sc", 1           )
@@ -112,8 +139,23 @@ sub Ma_EnableMacro
    {
    my ($code, $enable, %opt) = @_;
    
-   my $macro = Ma_GetMacro($code, %opt) || return 0;
-   return $macro->{disabled} = !$enable;
+   #my $macro = Ma_GetMacro($code, %opt) || return 0;
+   #return $macro->{disabled} = !$enable;
+
+   Ma_SetMacro($code, enable => $enable, %opt);
+   
+   }
+
+
+# This is deprecated. use  Ma_SetMacro or SISetMacro directly with enable=>boolean opt
+#   
+# notice! unfortunately, the signature for this sub is ($code, $enable, %opt)
+# here $code is the actual code string. This is unlike the other external SI
+# methods that allow code=>str or key=>k options.
+#   
+sub SIEnableMacro   
+   {
+   return Ma_EnableMacro($_);
    }
    
    
