@@ -1,9 +1,15 @@
-siopt:test:_last_str:ZXhpdA==
+siopt:test:_last_str:cXVpdA==
 siopt:global:_si_errorcode:MA==
 siopt:global:_si_msg:ZXh0ZXJuYWxzIGxvYWRlZDogMTI0IGFkZGVkLCAwIHJlcGxhY2VkLCAwIHNraXBwZWQ=
-siopt:global:ecnodeid:NTM5
+siopt:global:ecnodeid:Nzkw
 siopt:global:prompt:RW50ZXIgU3RyaW5n
 siclip:
+sihist:test:quit
+sihist:test:help keys
+sihist:test:context list
+sihist:test:help context
+sihist:test:help commands
+sihist:test:help help
 sihist:test:exit
 sihist:test:help welcome
 sihist:test:help

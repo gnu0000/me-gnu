@@ -8,7 +8,7 @@
 #  my $str = SIGetString(prompt=>"username", preset=>"$lastentry", context=>"username");
 #
 #  > SIGetString provides:
-#      cmdline like editing: moving: right/left, ctrl-right/left, home/end;   clear: esc;   deleting: del/back;
+#      cmdline like editing: moving: right/left, ctrl-right/left, home/end; clear: esc; deleting: del/back;
 #      copy/cut/paste:       numpad +/numpad -/numpad <ins>
 #      input history:        up/down (matching what you have typed so far)
 #      macros:               add macro's via SISetMacro()
@@ -16,17 +16,23 @@
 #      externals:            tab & shift tab to recall app defined strings or to do
 #                            filename completion, or even context sensitive text completion. etc...
 #                            There is a lot to the extern stuff. See SIExternal SIExternCallback
+#      keyboard macros:      (via KeyInput)
+#        <F12>      - start recording keys
+#        <F12>      - end recording keys (and bind to to <F11>     
+#        <Ctrl>#    - end recording keys (and bind to to <Ctrl-#>)
+#        <Shift>F12 - end recording keys (and bind to to _next_ key)
+#        <F11>      - playback keys
+#        <Ctrl>#    - playback keys
+#        <Ctrl><Shift>F12 - enable/disable key macros
 #
 #  > SIGetString can act in different contexts, so that, for example:
 #        my $name = SIGetString(context=>"names");
 #        my $file = SIGetString(context=>"files");
-#    where each input will have its own cmd history, tags and macros.
-#    you can alos get/set context via SIContext()
+#    where each input will have its own cmd history, tags, macros & externals.
+#    you can also get/set context via SIContext()
 #
 #  > SIStateStream allows you to load/store 
 #        options, macros, clipboard, history, externals, and aliases
-#
-#
 #
 # default key bindings:
 #    <shift><ctrl>? .... This help
@@ -129,6 +135,7 @@ our @EXPORT_OK = qw(SIGetString
                     SIAddHistory
                     SISetHistory
                     SIGetHistorySize
+                    SIGetLastVal
                     SIExternal
                     SIAddExternal
                     SIWordRegex
@@ -248,6 +255,7 @@ sub SIGetString
 
    #my ($preset,$prompt,$noisy,$last) = VVd(preset=>"",prompt=>"",noisy=>0,_last_str=>"");
    my ($preset,$presetlast,$laststr,$ignorechars) = VVd(preset=>"",presetlast=>0,_last_str=>"",ignorechars=>"");
+
    my ($prompt,$noisy,$ignorecodes,$getkeyfn) = VVd(prompt=>"",noisy=>0,ignorecodes=>0,mygetkeyfn=>\&GetKey);
    $preset = ($presetlast ? $laststr : $preset) || "";
    my ($str, $str_idx) = ($preset, length $preset);
@@ -301,14 +309,11 @@ sub SIGetString
    return $str;
    }
 
-#
-# don't use
-# this is bugged if there is no previous value  
-#   
-#sub SIGetLastVal
-#   {
-#   return ResolveVar("_last_str");
-#   }
+
+sub SIGetLastVal
+   {
+   return ResolveVar("_last_str");
+   }
    
 sub IgnoreChar
    {

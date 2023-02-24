@@ -45,8 +45,8 @@
 #  <F12>      - end recording (and bind to to <F11>     
 #  <Ctrl>#    - end recording (and bind to to <Ctrl-#>)
 #  <Shift>F12 - end recording (and bind to to _next_ key)
-#  <F11>   - playback
-#  <Ctrl># - playback
+#  <F11>      - playback
+#  <Ctrl>#    - playback
 # 
 #  <Ctrl><Shift>F12 - enable/disable macros
 #

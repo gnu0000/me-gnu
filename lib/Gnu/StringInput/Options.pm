@@ -102,9 +102,22 @@ sub CreateContextOptionStream
       next if _InternalVar($vname);
       next if $vname =~ /^__/;
       my $value = Var($vname);
-      next unless defined $value;
+      next unless defined $value and $value ne "";
 #my $rval = ref $value;
 #next if $rval && $rval ne "Regexp";
+
+#debug
+#if ($vname eq "_last_str") {
+#   print "\n=========================DEBUG StringInput Options CreateContextOptionStream ==========\n";
+#   print "context : $context \n";
+#   print "vname   : $vname   \n";
+#   print "value   : $value\n";
+#   print "value defined ? " .(defined $value ? "yup" : "nope") . "\n";
+#   my $bval = encode_base64($value);
+#   print "bval    : $bval\n";
+#   print"line=siopt:$context:$vname:$bval\n";
+#}
+
       next if ref $value;
       my $b64val = encode_base64($value);
       $stream .= "siopt:$context:$vname:$b64val";
@@ -127,6 +140,19 @@ sub Op_LoadStream
       
       my ($linetype,$context,$vname,$entry) = $line =~ /^(siopt):([^:]+):([^:]+):(.*)$/;
       next unless $context && $vname;
+
+#debug
+#if ($vname eq "_last_str") {
+#   print "\n=========================DEBUG StringInput Options Op_LoadStream =========\n";
+#   print "line    : $line    \n";
+#   print "linetype: $linetype\n";
+#   print "context : $context \n";
+#   print "vname   : $vname   \n";
+#   print "entry   : $entry   \n";
+#   print "context exists? " . (exists $all_options->{$context}? "yup" : "nope") . "\n";
+#   print "decoded entry=" . decode_base64($entry) . "\n";
+#}
+
       $all_options->{$context} = {} if !exists $all_options->{$context};
       $all_options->{$context}->{$vname} = decode_base64($entry);
       }

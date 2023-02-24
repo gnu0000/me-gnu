@@ -162,6 +162,7 @@ use strict;
 use feature 'state';
 use Gnu::ListUtil qw(Tuples);
 
+
 require Exporter;
 our @ISA       = qw(Exporter);
 our @EXPORT    = qw();
@@ -273,6 +274,7 @@ sub _InitContext
 
    my $all = _adata();
    my $hash_init = $parmct == 1 && $href && ref($href) eq "HASH";
+
    $all->{$ctx}  = $hash_init ? {%{$href}} : {}; # {%{$href}}
    _ident_nvl($all->{$ctx},@_)  if $parmct > 1;
    return $all->{$ctx};
