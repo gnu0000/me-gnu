@@ -18,7 +18,10 @@ our %EXPORT_TAGS = (ALL=>[@EXPORT_OK]);
 
 sub Usage
    {
-   print Template("usage");
+   my ($templateName) = @_;
+
+   $templateName ||= "usage";
+   print Template($templateName);
    exit(0);
    }
 
