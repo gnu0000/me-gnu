@@ -23,6 +23,11 @@
 # $params   - a hashref of the cgi params, if no value is given it is assigned a TRUE value
 # $resource - the name of the resource being queried
 #
+# note:
+# Don't forget: If the server is proper REST. All posts should return the resource
+# location in the Location header. And if the client is CORS the serever also nees to
+# add a Access-Control-Expose-Headers: Location  header
+#
 
 package Gnu::CGIUtil;
 
@@ -30,10 +35,11 @@ use warnings;
 use strict;
 require Exporter;
 use JSON;
+use HTTP::Status;
 
 our @ISA         = qw(Exporter);
 our @EXPORT_OK   = qw();
-our @EXPORT      = qw(Route ReturnText ReturnJSON);
+our @EXPORT      = qw(Route ReturnText ReturnJSON GetPostBody);
 our $VERSION     = 0.20;
 
 sub Route {
@@ -65,17 +71,29 @@ sub GetParams {
 }
 
 
-sub ReturnText {
-   my ($content) = @_;
+sub GetPostBody {
+   local $/ = undef;
+   binmode STDIN;
+   my $data = <STDIN>;
+   return $data;
+}
 
+
+sub ReturnText {
+   my ($content, $statusCode) = @_;
+
+   print "Status: $statusCode " . status_message($statusCode) . "\r\n" if $statusCode;
    print "Content-type: text/plain\n\n" . $content . "\n";
 }
 
 
 sub ReturnJSON {
-   my ($content) = @_;
+   my ($content, $statusCode) = @_;
+
+   print "Status: $statusCode " . status_message($statusCode) . "\r\n" if $statusCode;
    print "Content-type: text/json\n\n";
-   print to_json($content);
+#   print to_json($content);
+   print encode_json($content);
 }
 
 

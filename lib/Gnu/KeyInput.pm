@@ -93,6 +93,9 @@ our @EXPORT_OK = qw(GetKey
                     KeyCodesMatch
                     KeyPassesFilter
                     DecomposeCode
+                    Flush
+                    KeyReady
+                    _Console
                     );
 our %EXPORT_TAGS = (ALL=>[@EXPORT_OK]);
 
@@ -189,6 +192,45 @@ sub GetKey
       return $key;
       }
    }
+
+sub Flush
+   {
+   my $console = _Console();
+
+   $console->Flush();
+   }
+
+
+# broken
+sub KeyReady
+   {
+   my $console = _Console();
+
+   while ($console->GetEvents())
+      {
+      my ($type, $down, undef, $vkey, undef, $ascii, $ctl) = $console->PeekInput();
+      return 0 if !defined $type;
+      return 1 if $type == 1 && $down == 1;
+      $console->Input();
+      }
+   return 0;
+   }
+
+
+
+#   if (!defined $type) return 0;
+#
+#   if ($type != 1) {$console->Input(); return 0}
+#   if ($down != 1) {$console->Input(); return 0}
+#
+#print "type  = " . (defined $type  ?  "$type"  : "undef") . ", ";
+#print "down  = " . (defined $down  ?  "$down"  : "undef") . ", ";
+#print "vkey  = " . (defined $vkey  ?  "$vkey"  : "undef") . ", ";
+#print "ascii = " . (defined $ascii ?  "$ascii" : "undef") . ", ";
+#print "ctl   = " . (defined $ctl   ?  "$ctl"   : "undef") . "\n";
+#
+#   return (defined $type && $type == 1 && $down == 1);
+#   }
 
 
 # get/set macros as a stream for io
@@ -347,6 +389,9 @@ sub _ConsoleInput
       return _Key($ascii, $vkey, $ctl);
       }
    }
+
+
+
    
 
 #sub _ShowCursor
@@ -467,7 +512,6 @@ sub KeyName
    my ($key) = @_;
    
 #print "debug: KeyName param ref is '" . (ref $key) .  "'\n";
-   
 
    # allow KeyName($code) as well as KeyName($key)
    return _NameFromCode($key) unless ref $key eq "HASH";
