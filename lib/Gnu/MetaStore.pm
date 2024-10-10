@@ -79,7 +79,7 @@ sub MSSaveData
    my $altspec = OptionalSpec($name);
    return MSSaveExternalData($name, $altspec, $data, $binary) if $altspec;
 
-   my $zip = GetZip() || return MSAbort(0, 0, "could not get Meta Archive");;
+   my $zip = GetZip() || return MSAbort(0, 0, "could not get Meta Archive");
    my $isx = IsEncrypted($name);
    $data = Encrypt($name, $data) if $isx;
 

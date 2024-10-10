@@ -12,6 +12,7 @@ use warnings;
 use strict;
 use feature 'state';
 use Win32;
+use Win32::API;
 use Win32::Console;
 use Win32::Process;
 use Win32::GuiTest qw(FindWindowLike GetWindowText SetForegroundWindow SendKeys);

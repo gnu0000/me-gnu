@@ -49,7 +49,8 @@ sub Route {
    my $path   = $ENV{PATH_INFO     } || "";
 
    foreach my $route (@routes) {
-      my ($resource, $id) = $path =~ /^\/(\w+)\/?(\d+)?/;
+      my ($resource, $id) = $path =~ /^\/(\w+)\/?(.+)?/;
+
       next unless $resource =~ /$route->{resource}/i;
       next unless $method   =~ /$route->{method}/i;
       my $params = GetParams();
@@ -88,12 +89,12 @@ sub ReturnText {
 
 
 sub ReturnJSON {
-   my ($content, $statusCode) = @_;
+   my ($content, $statusCode, $skip_encode) = @_;
 
    print "Status: $statusCode " . status_message($statusCode) . "\r\n" if $statusCode;
    print "Content-type: text/json\n\n";
 #   print to_json($content);
-   print encode_json($content);
+   print $skip_encode ? $content : encode_json($content);
 }
 
 

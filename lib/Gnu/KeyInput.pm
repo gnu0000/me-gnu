@@ -1,7 +1,7 @@
 #
 # KeyInput.pm - console keyboard interface
 #  C Fitzgerald 8/1/2013
-#
+#                                                                
 # Synopsis:
 #  my $key = GetKey(ignore_ctl_keys=>1);
 #  print "\nYou gave me:\n"
@@ -96,6 +96,7 @@ our @EXPORT_OK = qw(GetKey
                     Flush
                     KeyReady
                     _Console
+                    QueueMacro
                     );
 our %EXPORT_TAGS = (ALL=>[@EXPORT_OK]);
 
@@ -119,13 +120,14 @@ sub _CTRL_MASK2() {4}
 #   codes=>[...]       - only accept keys with these codes
 #   vkeys=>[...]       - only accept keys with these vkeys
 #   chars=>[...]       - only accept these chars
+#   play=>1            - playback default (F11) macro
 #
 sub GetKey
    {
    my (%options) = @_;
 
    state $macro          = [];
-   state $macro_state    = 0;
+   state $macro_state    = 0; # 0=, 1=recording, 2=playback
    state $macro_keyindex = 0;
    state $macros_enabled = 1;
 
@@ -141,9 +143,14 @@ sub GetKey
          $key = $macro->[$macro_keyindex++];
          $macro_state = 0 if $macro_keyindex >= scalar @{$macro};
          }
+      elsif ($options{play})
+         {
+         $key = _Key(0,122,0);
+         }
       else
          {
-         $key = _ConsoleInput();
+         $key = QueueMacro() || _ConsoleInput();
+         #$key = _ConsoleInput();
          }
       next if $options{ignore_ctl_keys} && IsCtlKey($key);
  
@@ -192,6 +199,7 @@ sub GetKey
       return $key;
       }
    }
+
 
 sub Flush
    {
@@ -289,6 +297,8 @@ sub KeyMacro
    {
    my ($key, $macro) = @_;
 
+   $key = {code => "122sc"} if !$key;
+
    my $hashkey = $key->{code};
    my $macros  = KeyMacros();
    if (scalar @_ > 1)
@@ -337,16 +347,6 @@ sub ParseMacroStream
    my $macros = {};
    foreach my $line (split /^/, $stream) 
       {
-#      chomp $line;
-#      chop $line if $line =~ /\x0D$/;
-#      next if $line =~ /^#/;
-#      next if $line =~ /^\s*$/;
-
-#      next unless $line = CleanInputLine($line);
-#      my ($linetype, $bindcode, $keystr) = split(/:/, $line  );
-#      next unless $linetype eq "k";
-#      my @keydefs                        = split(/,/, $keystr);
-
       $line = CleanInputLine($line,1,0);
       my ($bindcode, $keystr) = $line =~ /^k:([^:]+):(.*)$/;
       next unless $bindcode && $keystr;
@@ -375,6 +375,7 @@ sub _Console
    return $console;
    }
 
+
 sub _ConsoleInput
    {
    #state $console = InitConsole();
@@ -383,16 +384,13 @@ sub _ConsoleInput
 
    while (1)
       {
-      my ($type, $down, undef, $vkey, undef, $ascii, $ctl) = $console->Input();
+      my ($type, $down, $count, $vkey, $scan, $ascii, $ctl) = $console->Input();
 
       next unless defined $type && $type == 1 && $down == 1;
       return _Key($ascii, $vkey, $ctl);
       }
    }
 
-
-
-   
 
 #sub _ShowCursor
 #   {
@@ -500,8 +498,13 @@ sub KeyPassesFilter
    }
 
 
-   
 # key info
+#
+# KeyName($key)         => name string
+# _NameFromCode($code)
+#
+#
+#
 #
 #   
 ##################################################   
@@ -646,6 +649,18 @@ sub _Key
    }
 
 
+sub _KeyFromCode
+   {
+   my ($code) = @_;
+
+   return $code unless $code;
+   my ($v,$s,$c,$ok,$any) = DecomposeCode($code);
+   my $ctl = ($s eq "S" ? _SHFT_MASK : 0) | ($c eq "C" ? _CTRL_MASK1: 0);
+   return _Key($v, $v, $ctl)
+   }
+
+
+
 sub MakeKey
    {
    my ($vkey, $isshft, $isctrl, $ascii, $char) = @_;
@@ -676,6 +691,32 @@ sub _Copy
    my %params = (%{$key}, %mods);
    return _Key(@params{"ascii", "vkey", "ctl"});
    }
+
+
+
+# not yet implemented
+# A universal thingie -> $key method
+#
+#
+##  _Key($key)
+##  _Key("122sc")             # code
+##  _Key("99|67|0")           # triplet (from stream)
+##  _Key("A")                 # ascii
+##  _Key("<enter>")           # name
+##  _Key("F11")               # name
+##  _Key($ascii, $vkey, $ctl) # from console
+#sub _Key
+#   {
+#   my ($multi, $vkey, $ctl) = @_;
+#
+#   return "key"      if  ref $multi eq "HASH";
+#   return "code"     if  $multi =~ /^\d+sc$/i;
+#   return "triplet"  if  $multi =~ /^\d+\|\d+\|\d+$/;
+#   return "ascii"    if  length($multi) == 1;
+#   return "name"     if  $multi =~ /^\</;
+#   return "console"  if  $vkey;
+#   return "unknown";
+#   }
 
 
 # key finding - A  wip
@@ -759,8 +800,6 @@ sub IsToggleMacrosKey
    }
 
 
-
-
 # key finding
 #
 #   
@@ -827,18 +866,24 @@ sub _ReducedCode
    $code =~ s/C//i unless $match =~ /C/i;
    return $code;
    }
-   
-   
-   
-   
-#needed ?   
-#sub CodeKeysMatch
-#   {
-#   my ($code, @keys) = @_;
-#   }
-   
-   
 
+
+
+
+sub QueueMacro
+   {
+   my ($key_or_code) = @_;
+
+   state $qkey = undef;
+   
+   my $key = ref $key_or_code eq "HASH" ? $key_or_code : _KeyFromCode($key_or_code);
+   return $qkey = $key if $key;
+   $key = $qkey;
+   $qkey = undef;
+   return $key;
+   }
+   
+   
 1; # two
   
 __END__   

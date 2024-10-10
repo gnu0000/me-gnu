@@ -12,7 +12,7 @@ use feature 'state';
 # constants
 my $NAM_HISTORY      = "__history"    ;
 my $NAM_HISTORY_REF  = "__history_ref";
-my $MAX_HISTORY      = 300;
+my $MAX_HISTORY      = 1000;
 my $MIN_SAVE_LENGTH  = 2;
 
 #sub SIHistory  {v_isg($NAM_HISTORY  , 0, [], @_)}
