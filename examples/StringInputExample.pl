@@ -26,7 +26,7 @@ my $DEFAULT_CONTEXT = "test";
 
 MAIN:
    $| = 1;
-   ArgBuild("*^context= *^nosave *^reset *^clear *^extern= *^samples  *^help *^quiet *^debug");
+   ArgBuild("*^context= *^nosave *^reset *^clear *^extern= *^samples *^help *^quiet *^debug *^play");
    ArgParse(@ARGV) or die ArgGetError();
    Setup();
    Run();

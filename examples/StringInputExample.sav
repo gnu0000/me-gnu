@@ -1,16 +1,18 @@
-siopt:test:_last_str:cXVpdA==
+siopt:test:_last_str:ZXhpdA==
 siopt:global:_si_errorcode:MA==
 siopt:global:_si_msg:ZXh0ZXJuYWxzIGxvYWRlZDogMTI0IGFkZGVkLCAwIHJlcGxhY2VkLCAwIHNraXBwZWQ=
-siopt:global:ecnodeid:Nzkw
+siopt:global:ecnodeid:MTA0Mg==
 siopt:global:prompt:RW50ZXIgU3RyaW5n
 siclip:
+sihist:test:exit
+sihist:test:save
+sihist:test:aaa
 sihist:test:quit
 sihist:test:help keys
 sihist:test:context list
 sihist:test:help context
 sihist:test:help commands
 sihist:test:help help
-sihist:test:exit
 sihist:test:help welcome
 sihist:test:help
 sihist:test:show contexts
@@ -139,3 +141,4 @@ siextc:test:0:3:qwerty2
 siextc:test:0:3:qwerty3
 siextc:test:0:4:{exfiles}
 siextc:test:0:2:zeppelin3
+k:122sc:97|65|0,97|65|0,97|65|0
