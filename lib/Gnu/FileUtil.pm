@@ -81,6 +81,7 @@ sub SpillFile
 # keep_dashes
 # keep_score
 # keep_dots
+# keep_commas
 #
 sub NormalizeFilename
    {
@@ -90,6 +91,7 @@ sub NormalizeFilename
    my $file = {name=>$name, newname=>$name, options=>{%options}};
 
    RemoveScore    ($file);
+   RemoveComma    ($file);
    RemoveDot      ($file);
    Case           ($file);
    SpecialAnd     ($file);
@@ -103,9 +105,6 @@ sub NormalizeFilename
 
 ###############################################################################
 
-sub RemovePh
-   {
-   }
 
 sub RemoveScore
    {
@@ -123,6 +122,17 @@ sub RemoveScore
       }
    $file->{score} = "" unless $file->{options}->{keep_score};
    }
+
+
+sub RemoveComma
+   {
+   my ($file) = @_;
+
+   return if $file->{options}->{keep_commas};
+
+   $file->{newname} =~ s/,//g;
+   }
+
 
 sub RemoveDot
    {
