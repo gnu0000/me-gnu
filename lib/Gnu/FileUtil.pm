@@ -15,6 +15,7 @@
 #           keep_dashes
 #           keep_score
 #           keep_dots
+#           oddout
 #
 # Craig Fitzgerald
 
@@ -98,6 +99,7 @@ sub NormalizeFilename
    CvtChars       ($file);
    CollapseScores ($file);
    AddScore       ($file);
+   OddOut         ($file);
 
    return $file->{newname};
    }
@@ -183,6 +185,16 @@ sub AddScore
    my ($file) = @_;
 
    $file->{newname} = $file->{score} . $file->{newname};
+   }
+
+
+sub OddOut
+   {
+   my ($file) = @_;
+
+   return unless $file->{options}->{oddout};
+
+   $file->{newname} =~ s/[^a-zA-Z0-9_.\-]/_/g;
    }
 
 

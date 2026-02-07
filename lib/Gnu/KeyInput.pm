@@ -209,7 +209,6 @@ sub Flush
    }
 
 
-# broken
 sub KeyReady
    {
    my $console = _Console();
@@ -223,7 +222,6 @@ sub KeyReady
       }
    return 0;
    }
-
 
 
 #   if (!defined $type) return 0;

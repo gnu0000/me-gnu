@@ -161,7 +161,6 @@ our %EXPORT_TAGS = (MIN =>[qw(SIGetString SIOption SIContext)],
                     BASE=>[qw(SIGetString SIOption SIContext SIExternal SIAddExternal SIWordRegex SIStateStream)],
                     ALL =>[@EXPORT_OK]);
 
-
 # constants
 my $DEFAULT_CONTEXT  = "default";
 
@@ -233,6 +232,8 @@ sub EditKeymap
 #   trim         => 1        - return string with begin/end whitespace removed
 #   trimstart    => 1        - return string with beginning whitespace removed
 #   trimend      => 1        - return string with ending    whitespace removed
+#   uppercase    => 1        - uppercase the string
+#   lowercase    => 1        - lowercase the string
 ##  exfiles      => 1        - use filesystem for external data
 #   exfileroot   => "dir"    - set root for exfiles, cwd is default
 ##  excontext    => 1        - use contextual matching for external data
@@ -297,6 +298,8 @@ sub SIGetString
 
    $str =~ s/^[\r\n\s]+// if V("trim") || V("trimstart");
    $str =~ s/[\r\n\s]+$// if V("trim") || V("trimend");
+   $str = lc($str) if V("lowercase");
+   $str = uc($str) if V("uppercase");
 
    SIAddHistory($str, V(allowdups=>0)) unless V("nohistmod");
    VarSet(_last_str=>$str);
